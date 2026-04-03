@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Approximation/Approximation.vcxproj" Id="de273e35-dfb3-481e-a32d-736ec3284f3c" />
+</Solution>
