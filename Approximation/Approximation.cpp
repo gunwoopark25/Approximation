@@ -1,4 +1,5 @@
 #include "Approximation.h"
+#include "Point2D.h"
 #include <iostream>
 #include <string>
 #include <fstream>
