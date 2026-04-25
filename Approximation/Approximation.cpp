@@ -11,17 +11,17 @@ using namespace std;
 void Approximation::inputData()
 {
     Degree = 3;
+    Parameter = 10;
+    R = 5;
 }
 
 void Approximation::fileLoad()
 {
     /*--- txt 파일 열기*/
     ifstream readFile("ApproximationPoints.txt");
-    
-    if(!readFile)
+
+    if (!readFile)
     {
         cout << "You can't load this file." << endl;
     }
-
-
 }
