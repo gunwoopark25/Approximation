@@ -11,14 +11,28 @@ public:
     int R;
     int NumberOfConstraint;
 
+    double Min_x;
+    double Min_y;
+    double Max_x;
+    double Max_y;
+    double Max_u;
+
+    double dx;
+    double dy;
+
+    double *u;
+
     /*--- 2D ---*/
     Point2D *InputPoint;
 
     /*--- Matrix ---*/
     double **Matrix;
 
+
     /*--- 함수 ---*/
     void inputData();
     void fileLoad();
     void ChordLength();
+    void Normalization();
+    void Axb();
 };

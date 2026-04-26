@@ -7,6 +7,8 @@ int main()
     A.inputData();
     A.fileLoad();
     A.ChordLength();
+    A.Normalization();
+    A.Axb();
 
     return 0;
 }

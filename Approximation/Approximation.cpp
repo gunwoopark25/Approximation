@@ -56,19 +56,105 @@ void Approximation::fileLoad()
 
 void Approximation::ChordLength()
 {
-    double *u = new double[NumberOfConstraint];
+    /*--- u, l 동적할당 ---*/
+    u = new double[NumberOfConstraint];
     double *l = new double[NumberOfConstraint];
 
     u[0] = 0;
     /*--- l 계산 ---*/
-    for (int i = 0; i < NumberOfConstraint-1; i++)
+    for (int i = 0; i < NumberOfConstraint - 1; i++)
     {
-        l[i] = sqrt(pow(InputPoint[i+1].x - InputPoint[i].x,2)+pow(InputPoint[i+1].y - InputPoint[i].y,2));
+        l[i] = sqrt(pow(InputPoint[i + 1].x - InputPoint[i].x, 2) + pow(InputPoint[i + 1].y - InputPoint[i].y, 2));
     }
 
     /*--- u 계산 ---*/
     for (int i = 1; i < NumberOfConstraint; i++)
     {
-        u[i] = u[i-1]+l[0];
+        u[i] = u[i - 1] + l[0];
+    }
+}
+
+void Approximation::Normalization()
+{
+    Min_x = InputPoint[0].x;
+    Min_y = InputPoint[0].y;
+    Max_x = InputPoint[0].x;
+    Max_y = InputPoint[0].y;
+
+    for (int i = 0; i < NumberOfConstraint; i++)
+    {
+        /*--- 최솟값 찾기 ---*/
+        if (Min_x > InputPoint[i].x)
+        {
+            Min_x = InputPoint[i].x;
+        }
+        if (Min_y > InputPoint[i].y)
+        {
+            Min_y = InputPoint[i].y;
+        }
+        /*--- 최댓값 찾기 ---*/
+        if (Max_x < InputPoint[i].x)
+        {
+            Max_x = InputPoint[i].x;
+        }
+        if (Max_y < InputPoint[i].y)
+        {
+            Max_y = InputPoint[i].y;
+        }
+        if (Max_u < u[i])
+        {
+            Max_u = u[i];
+        }
+    }
+
+    dx = Max_x - Min_x;
+    dy = Max_y - Min_y;
+
+    for (int i = 0; i < NumberOfConstraint; i++)
+    {
+        /*--- Constraint 정규화 ---*/
+        Matrix[i][0] = (Matrix[i][0] - Min_x) / dx;
+        Matrix[i][1] = (Matrix[i][1] - Min_y) / dy;
+
+        /*--- Chord Length 정규화 ---*/
+        u[i] = u[i] / Max_u;
+    }
+}
+
+void Approximation::Axb()
+{
+    /*--- 전치행렬 matrix 동적할당 ---*/
+    double **TransposedMatrix = new double *[2];
+    for (int i = 0; i <= 1; i++)
+    {
+        TransposedMatrix[i] = new double[NumberOfConstraint];
+    }
+
+    /*--- 전치 행렬 값 저장 ---*/
+    for (int i = 0; i < NumberOfConstraint; i++)
+    {
+        TransposedMatrix[0][i] = Matrix[i][0];
+        TransposedMatrix[1][i] = Matrix[i][1];
+    }
+
+    /*--- 계산된 행렬 동적할당 ---*/
+    double **ATA = new double *[2];
+    for (int i = 0; i < 2; i++)
+    {
+        ATA[i] = new double[2];
+    }
+
+    /*--- 행렬 계산 ---*/
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            ATA[i][j] = 0;
+
+            for (int k = 0; k < NumberOfConstraint; k++)
+            {
+                ATA[i][j] += TransposedMatrix[i][k] * Matrix[k][j];
+            }
+        }
     }
 }
