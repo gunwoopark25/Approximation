@@ -11,7 +11,7 @@ using namespace std;
 void Approximation::inputData()
 {
     Degree = 3;
-    Parameter = 10;
+    Parameter = 1000;
     R = 5;
 
     NumberOfConstraint = Degree + 2;
