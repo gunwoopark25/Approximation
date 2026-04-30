@@ -486,3 +486,103 @@ void Approximation::solveNormalization()
         cout << All_POC[i].x << " " << All_POC[i].y << endl;
     }
 }
+
+void Approximation::writePS()
+{
+    ofstream psFile("Curve.ps");
+
+    if (!psFile)
+    {
+        std::cout << "You can't load this file" << endl;
+        return;
+    }
+
+    /*--- ps 헤더 ---*/
+    psFile << "%!PS" << endl;
+
+    /*--- CP 라인 그리기 ---*/
+    psFile << "newpath" << endl;
+    for (int i = 0; i <= Degree; i++)
+    {
+        if (i == 0)
+        {
+            psFile << CP[i].x << " " << CP[i].y << " " << "moveto" << endl;
+        }
+        else
+        {
+            psFile << CP[i].x << " " << CP[i].y << " " << "lineto" << endl;
+        }
+    }
+    psFile << "stroke" << endl;
+
+    /*--- CP 원 그리기 ---*/
+    for (int i = 0; i <= Degree; i++)
+    {
+        psFile << "newpath" << endl;
+        if (i == 0)
+        {
+            psFile << CP[i].x << " " << CP[i].y << " " << R << " " << "0 360 arc" << endl;
+            psFile << "fill" << endl;
+        }
+        else if (i == Degree)
+        {
+            psFile << CP[i].x << " " << CP[i].y << " " << R << " " << "0 360 arc" << endl;
+            psFile << "fill" << endl;
+        }
+        else
+        {
+            psFile << CP[i].x << " " << CP[i].y << " " << R << " " << "0 360 arc" << endl;
+            psFile << "gsave" << endl;
+            psFile << "1 setgray" << " " << "fill" << " " << "grestore" << " " << "0 setgray" << endl;
+            psFile << "stroke" << endl;
+        }
+    }
+
+    /*--- All POC Line 그리기 ---*/
+    psFile << "newpath" << endl;
+    for (int i = 0; i <= Parameter; i++)
+    {
+        if (i == 0)
+        {
+            psFile << All_POC[i].x << " " << All_POC[i].y << " " << "moveto" << endl;
+        }
+        else
+        {
+            psFile << All_POC[i].x << " " << All_POC[i].y << " " << "lineto" << endl;
+        }
+    }
+    psFile << "stroke" << endl;
+
+    /*--- POC 원 그리기 ---*/
+    
+
+    for (int i = 0; i <= Degree; i++)
+    {
+        if (i == 0)
+        {
+            psFile << "newpath" << endl;
+            psFile << InputPoint[i].x << " " << InputPoint[i].y << " " << R << " " << "0 360 arc" << endl;
+            psFile << "stroke" << endl;
+        }
+        else if (i == Degree)
+        {
+            psFile << "newpath" << endl;
+            psFile << InputPoint[i].x << " " << InputPoint[i].y << " " << R << " " << "0 360 arc" << endl;
+            psFile << "stroke" << endl;
+        }
+        else
+        {
+            psFile << "newpath" << endl;
+            psFile << InputPoint[i].x << " " << InputPoint[i].y << " " << R << " " << "0 360 arc" << endl;
+            psFile << "gsave" << endl;
+            psFile << "1 setgray" << " " << "fill" << " " << "grestore" << " " << "0 setgray" << endl;
+            psFile << "stroke" << endl;
+        }
+    }
+
+    psFile << "showpage" << endl;
+
+    psFile.close();
+
+
+}

@@ -12,4 +12,5 @@ void main()
     A.setCP();
     A.BezierCurve();
     A.solveNormalization();
+    A.writePS();
 }

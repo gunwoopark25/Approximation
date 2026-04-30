@@ -45,4 +45,5 @@ public:
     void setCP();
     void BezierCurve();
     void solveNormalization();
+    void writePS();
 };
