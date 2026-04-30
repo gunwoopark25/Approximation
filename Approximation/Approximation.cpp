@@ -70,7 +70,7 @@ void Approximation::ChordLength()
     /*--- u 계산 ---*/
     for (int i = 1; i < NumberOfConstraint; i++)
     {
-        u[i] = u[i - 1] + l[0];
+        u[i] = u[i - 1] + l[i-1];
     }
 }
 
@@ -80,6 +80,7 @@ void Approximation::Normalization()
     Min_y = InputPoint[0].y;
     Max_x = InputPoint[0].x;
     Max_y = InputPoint[0].y;
+    Max_u = u[0];
 
     for (int i = 0; i < NumberOfConstraint; i++)
     {
@@ -121,40 +122,4 @@ void Approximation::Normalization()
     }
 }
 
-void Approximation::Axb()
-{
-    /*--- 전치행렬 matrix 동적할당 ---*/
-    double **TransposedMatrix = new double *[2];
-    for (int i = 0; i <= 1; i++)
-    {
-        TransposedMatrix[i] = new double[NumberOfConstraint];
-    }
 
-    /*--- 전치 행렬 값 저장 ---*/
-    for (int i = 0; i < NumberOfConstraint; i++)
-    {
-        TransposedMatrix[0][i] = Matrix[i][0];
-        TransposedMatrix[1][i] = Matrix[i][1];
-    }
-
-    /*--- 계산된 행렬 동적할당 ---*/
-    double **ATA = new double *[2];
-    for (int i = 0; i < 2; i++)
-    {
-        ATA[i] = new double[2];
-    }
-
-    /*--- 행렬 계산 ---*/
-    for (int i = 0; i < 2; i++)
-    {
-        for (int j = 0; j < 2; j++)
-        {
-            ATA[i][j] = 0;
-
-            for (int k = 0; k < NumberOfConstraint; k++)
-            {
-                ATA[i][j] += TransposedMatrix[i][k] * Matrix[k][j];
-            }
-        }
-    }
-}

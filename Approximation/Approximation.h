@@ -34,5 +34,5 @@ public:
     void fileLoad();
     void ChordLength();
     void Normalization();
-    void Axb();
+    void BernsteinMatrix();
 };

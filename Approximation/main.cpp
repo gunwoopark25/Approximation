@@ -1,6 +1,6 @@
 #include "Approximation.h"
 
-int main()
+void main()
 {
     Approximation A;
 
@@ -8,7 +8,4 @@ int main()
     A.fileLoad();
     A.ChordLength();
     A.Normalization();
-    A.Axb();
-
-    return 0;
 }
