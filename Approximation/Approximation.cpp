@@ -286,7 +286,7 @@ void Approximation::calculateApproximation()
         }
     }
 
-    cout << "가우스조던 소거법 하기 위한 Matrix" << endl;
+    cout << "Matrix for GaussJordon" << endl;
     for (int i = 0; i < Degree - 1; i++)
     {
         for (int j = 0; j < Degree - 1 + Degree - 1; j++)
@@ -320,7 +320,7 @@ void Approximation::calculateApproximation()
         }
     }
 
-    cout << "가우스조던 소거법한 Matrix" << endl;
+    cout << " GaussJordon Matrix" << endl;
     for (int i = 0; i < Degree - 1; i++)
     {
         for (int j = 0; j < Degree - 1 + Degree - 1; j++)
@@ -461,5 +461,28 @@ void Approximation::BezierCurve()
 
 void Approximation::solveNormalization()
 {
+    for (int i = 0; i <= Degree; i++)
+    {
+        /*--- CP 정규화 해제 ---*/
+        CP[i].x = CP[i].x * dx + Min_x;
+        CP[i].y = CP[i].y * dy + Min_y;
+    }
 
+    for (int i = 0; i <= Parameter; i++)
+    {
+        /*--- All POC 정규화 해제 ---*/
+        All_POC[i].x = All_POC[i].x * dx + Min_x;
+        All_POC[i].y = All_POC[i].y * dy + Min_y;
+    }
+
+    cout << "--- CP Coordinate ---" << endl;
+    for (int i = 0; i <= Degree; i++)
+    {
+        cout << CP[i].x << " " << CP[i].y << endl;
+    }
+    cout << "--- All POC Coordinate ---" << endl;
+    for (int i = 0; i <= Parameter; i++)
+    {
+        cout << All_POC[i].x << " " << All_POC[i].y << endl;
+    }
 }
