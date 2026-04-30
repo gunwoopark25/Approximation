@@ -27,6 +27,7 @@ public:
 
     /*--- Matrix ---*/
     double **Matrix;
+    double **BernsteinMatrix;
 
 
     /*--- 함수 ---*/
@@ -34,5 +35,5 @@ public:
     void fileLoad();
     void ChordLength();
     void Normalization();
-    void BernsteinMatrix();
+    void makeBernsteinMatrix();
 };

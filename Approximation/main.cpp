@@ -8,4 +8,5 @@ void main()
     A.fileLoad();
     A.ChordLength();
     A.Normalization();
+    A.makeBernsteinMatrix();
 }

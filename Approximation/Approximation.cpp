@@ -41,7 +41,6 @@ void Approximation::fileLoad()
 
     /*--- 계산할 Matrix 동적할당 ---*/
     Matrix = new double *[NumberOfConstraint];
-
     for (int i = 0; i < NumberOfConstraint; i++)
     {
         Matrix[i] = new double[2];
@@ -122,4 +121,45 @@ void Approximation::Normalization()
     }
 }
 
+void Approximation::makeBernsteinMatrix()
+{
+    /*--- Bernstein Matrix 동적 할당 ---*/
+    BernsteinMatrix = new double* [NumberOfConstraint];
+    for (int i = 0; i < NumberOfConstraint; i++)
+    {
+        BernsteinMatrix[i] = new double[Degree + 1];
+    }
 
+    /*--- Bernstein Matrix value 대입 ---*/
+    for (int k = 0; k < NumberOfConstraint; k++)
+    {
+        for (int i = 0; i <= Degree; i++)
+        {
+            for (int j = 0; j <= Degree; j++)
+            {
+                int Degreep = 1;
+                int jp = 1;
+                int Degree_jp = 1;
+
+                for (int k = 1; k <= Degree; k++)
+                {
+                    Degreep *= k;
+                }
+                for (int k = 1; k <= j; k++)
+                {
+                    jp *= k;
+                }
+
+                int Degree_j = Degree - j;
+                for (int k = 1; k <= Degree_j; k++)
+                {
+                    Degree_jp *= k;
+                }
+                double nCr = Degreep / (jp * Degree_jp);
+
+                /*--- Bernstein Polynomial ---*/
+                BernsteinMatrix[k][j] = nCr * pow(1 - u[k], Degree - j) * pow(u[k], j);
+            }
+        }
+    }
+}
