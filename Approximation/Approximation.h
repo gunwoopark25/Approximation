@@ -10,6 +10,7 @@ public:
     int Parameter;
     int R;
     int NumberOfConstraint;
+    int POC_Size;
 
     double Min_x;
     double Min_y;
@@ -25,11 +26,14 @@ public:
     /*--- 2D ---*/
     Point2D *InputPoint;
     Point2D* CP;
+    Point2D* Coordinate;
+    Point2D* All_POC;
 
     /*--- Matrix ---*/
     double **Matrix;
     double **BernsteinMatrix;
     double** Result_Matrix;
+    
 
     /*--- 함수 ---*/
     void inputData();
@@ -39,4 +43,6 @@ public:
     void makeBernsteinMatrix();
     void calculateApproximation();
     void setCP();
+    void BezierCurve();
+    void solveNormalization();
 };

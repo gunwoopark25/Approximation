@@ -10,5 +10,6 @@ void main()
     A.makeBernsteinMatrix();
     A.calculateApproximation();
     A.setCP();
-    
+    A.BezierCurve();
+    A.solveNormalization();
 }

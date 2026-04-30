@@ -15,6 +15,12 @@ void Approximation::inputData()
     R = 5;
 
     NumberOfConstraint = Degree + 2;
+
+    POC_Size = Degree + 1;
+    for (int i = Degree; i > 0; i--)
+    {
+        POC_Size = POC_Size + i;
+    }
 }
 
 void Approximation::fileLoad()
@@ -408,4 +414,52 @@ void Approximation::setCP()
     {
         cout << CP[i].x << " " << CP[i].y << endl;
     }
+}
+
+void Approximation::BezierCurve()
+{
+    Coordinate = new Point2D[POC_Size];
+    All_POC = new Point2D[Parameter + 1];
+    for (int k = 0; k <= Parameter; k++)
+    {
+        double t = (double)k / Parameter;
+
+        for (int i = 0; i < Degree + 1; i++)
+        {
+            Coordinate[i].x = CP[i].x;
+            Coordinate[i].y = CP[i].y;
+        }
+
+        int boundary = 0;
+
+        for (int i = 1; i <= Degree; i++)
+        {
+            int n = Degree - i + 1;
+            int start_X = boundary + 1;
+            int end_X = boundary + n + 1;
+
+            for (int X = start_X; X < end_X; X++)
+            {
+                Coordinate[X + n].x = (1 - t) * Coordinate[X - 1].x + t * Coordinate[X].x;
+                Coordinate[X + n].y = (1 - t) * Coordinate[X - 1].y + t * Coordinate[X].y;
+            }
+
+            boundary += (Degree + 1 - i + 1);
+        }
+
+        int last_X = POC_Size - 1;
+        All_POC[k].x = Coordinate[last_X].x;
+        All_POC[k].y = Coordinate[last_X].y;
+    }
+
+    cout << "All POC Coordinate" << endl;
+    for (int i = 0; i <= Parameter; i++)
+    {
+        cout << All_POC[i].x << " " << All_POC[i].y << endl;
+    }
+}
+
+void Approximation::solveNormalization()
+{
+
 }
