@@ -163,3 +163,249 @@ void Approximation::makeBernsteinMatrix()
         }
     }
 }
+
+void Approximation::calculateApproximation()
+{
+    /*--- A Matrix 세팅 ---*/
+    double **A_Matrix = new double*[NumberOfConstraint - 2];
+    for (int i = 0; i < NumberOfConstraint - 2; i++)
+    {
+        A_Matrix[i] = new double[Degree - 1];
+    }
+
+    for (int i = 0; i < NumberOfConstraint - 2; i++)
+    {
+        for (int j = 0; j < Degree - 1; j++)
+        {
+            A_Matrix[i][j] = BernsteinMatrix[i + 1][j + 1];
+        }
+    }
+
+    /*--- b Matrix 세팅 ---*/
+    double **b_Matrix = new double* [NumberOfConstraint - 2];
+    for (int i = 0; i < NumberOfConstraint - 2; i++)
+    {
+        b_Matrix[i] = new double[2];
+    }
+
+    for (int i = 0; i < NumberOfConstraint - 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            b_Matrix[i][j] = Matrix[i + 1][j] - Matrix[0][j]*BernsteinMatrix[i + 1][0] - Matrix[NumberOfConstraint - 1][j] * BernsteinMatrix[i + 1][Degree];
+        }
+    }
+
+    /*--- A_T X A ---*/
+    double **ATA_Matrix = new double* [Degree - 1];
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        ATA_Matrix[i] = new double[Degree - 1];
+    }
+
+    /*--- 행렬 곱 계산 ---*/
+    for (int i = 0; i < Degree - 1; i++)        
+    {
+        for (int j = 0; j < Degree - 1; j++)   
+        {
+            double Sum = 0;
+
+            for (int k = 0; k < NumberOfConstraint - 2; k++)  
+            {
+                Sum += A_Matrix[k][i] * A_Matrix[k][j];
+            }
+
+            ATA_Matrix[i][j] = Sum;
+        }
+    }
+    
+
+    /*--- A_T X b ---*/
+    double **ATb_Matrix = new double* [Degree - 1];
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        ATb_Matrix[i] = new double[2];
+    }
+
+    for (int i = 0; i < Degree - 1; i++) 
+    {
+        for (int j = 0; j < 2; j++)             
+        {
+            double Sum = 0;
+
+            for (int k = 0; k < NumberOfConstraint - 2; k++) 
+            {
+                Sum += A_Matrix[k][i] * b_Matrix[k][j];
+            }
+
+            ATb_Matrix[i][j] = Sum;
+        }
+    }
+
+    /*--- 단위행렬 생성 ---*/
+    double** IdentityMatrix = new double* [Degree - 1];
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        IdentityMatrix[i] = new double[Degree - 1];
+    }
+
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        for (int j = 0; j < Degree - 1; j++)
+        {
+            if (i == j)
+            {
+                IdentityMatrix[i][j] = 1;
+            }
+            else
+            {
+                IdentityMatrix[i][j] = 0;
+            }
+        }
+    }
+
+    double** GaussJordonMatrix = new double* [Degree - 1];
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        GaussJordonMatrix[i] = new double[Degree - 1 + Degree - 1];
+    }
+
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        for (int j = 0; j < Degree - 1; j++)
+        {
+            GaussJordonMatrix[i][j] = ATA_Matrix[i][j];
+
+            GaussJordonMatrix[i][j + Degree - 1] = IdentityMatrix[i][j];
+        }
+    }
+
+    cout << "가우스조던 소거법 하기 위한 Matrix" << endl;
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        for (int j = 0; j < Degree - 1 + Degree - 1; j++)
+        {
+            cout << GaussJordonMatrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        double pivot = GaussJordonMatrix[i][i];
+        for (int j = 0; j < 2 * (Degree - 1); j++)
+        {
+            GaussJordonMatrix[i][j] /= pivot;
+        }
+
+        for (int k = 0; k < Degree - 1; k++)
+        {
+            if (k != i)
+            {
+                double factor = GaussJordonMatrix[k][i];
+                if (factor != 0)
+                {
+                    for (int j = 0; j < 2 * (Degree - 1); j++)
+                    {
+                        GaussJordonMatrix[k][j] -= GaussJordonMatrix[i][j] * factor;
+                    }
+                }
+            }
+        }
+    }
+
+    cout << "가우스조던 소거법한 Matrix" << endl;
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        for (int j = 0; j < Degree - 1 + Degree - 1; j++)
+        {
+            cout << GaussJordonMatrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    double** ATA_Inverse_Matrix = new double* [Degree - 1];
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        ATA_Inverse_Matrix[i] = new double[Degree - 1];
+    }
+
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        for (int j = 0; j < Degree - 1; j++)
+        {
+            ATA_Inverse_Matrix[i][j] = GaussJordonMatrix[i][j + Degree - 1];
+        }
+    }
+
+    cout << "Matrix" << endl;
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        for (int j = 0; j < Degree - 1; j++)
+        {
+            cout << ATA_Inverse_Matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    /*--- ATA_Inverse_Matrix X ATb_Matrix ---*/
+    Result_Matrix = new double* [Degree - 1];
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        Result_Matrix[i] = new double[2];
+    }
+
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            double Sum = 0;
+
+            for (int k = 0; k < Degree - 1; k++)
+            {
+                Sum += ATA_Inverse_Matrix[i][k] * ATb_Matrix[k][j];
+            }
+
+            Result_Matrix[i][j] = Sum;
+        }
+    }
+
+    cout << "Result Matrix" << endl;
+    for (int i = 0; i < Degree - 1; i++)
+    {
+        for (int j = 0; j < Degree - 1; j++)
+        {
+            cout << Result_Matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+void Approximation::setCP()
+{
+    CP = new Point2D[Degree + 1];
+    for (int i = 0; i < Degree + 1; i++)
+    {
+        if (i == 0)
+        {
+            CP[i].x = Matrix[0][0];
+            CP[i].y = Matrix[0][1];
+        }
+        else if (i == Degree)
+        {
+            CP[i].x = Matrix[NumberOfConstraint - 1][0];
+            CP[i].y = Matrix[NumberOfConstraint - 1][1];
+        }
+        else
+        {
+            CP[i].x = Result_Matrix[i-1][0];
+            CP[i].y = Result_Matrix[i-1][1];
+        }
+    }
+
+    cout << "=== CP ===" << endl;
+    for (int i = 0; i < Degree + 1; i++)
+    {
+        cout << CP[i].x << " " << CP[i].y << endl;
+    }
+}

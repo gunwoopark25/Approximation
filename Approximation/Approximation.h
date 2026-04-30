@@ -24,11 +24,12 @@ public:
 
     /*--- 2D ---*/
     Point2D *InputPoint;
+    Point2D* CP;
 
     /*--- Matrix ---*/
     double **Matrix;
     double **BernsteinMatrix;
-
+    double** Result_Matrix;
 
     /*--- 함수 ---*/
     void inputData();
@@ -36,4 +37,6 @@ public:
     void ChordLength();
     void Normalization();
     void makeBernsteinMatrix();
+    void calculateApproximation();
+    void setCP();
 };
