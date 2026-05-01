@@ -5,6 +5,10 @@
 class Approximation
 {
 public:
+    /*--- 생성자 ---*/
+    Approximation();
+    ~Approximation();
+
     /*--- 변수 ---*/
     int Degree;
     int Parameter;

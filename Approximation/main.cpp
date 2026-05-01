@@ -1,9 +1,9 @@
 #include "Approximation.h"
 
-void main()
+int main()
 {
     Approximation A;
-    A.inputData();
+
     A.fileLoad();
     A.ChordLength();
     A.Normalization();
@@ -12,5 +12,6 @@ void main()
     A.setCP();
     A.BezierCurve();
     A.solveNormalization();
-    A.writePS();
+
+    return 0;
 }

@@ -7,8 +7,8 @@
 
 using namespace std;
 
-/*--- 함수 정의 ---*/
-void Approximation::inputData()
+/*--- 생성자 ---*/
+Approximation::Approximation()
 {
     Degree = 3;
     Parameter = 1000;
@@ -22,6 +22,13 @@ void Approximation::inputData()
         POC_Size = POC_Size + i;
     }
 }
+
+Approximation::~Approximation()
+{
+    writePS();
+}
+
+/*--- 함수 정의 ---*/
 
 void Approximation::fileLoad()
 {
