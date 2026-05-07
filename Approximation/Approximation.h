@@ -40,7 +40,6 @@ public:
     
 
     /*--- 함수 ---*/
-    void inputData();
     void fileLoad();
     void ChordLength();
     void Normalization();

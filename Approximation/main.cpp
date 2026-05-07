@@ -1,6 +1,6 @@
 #include "Approximation.h"
 
-int main()
+void main()
 {
     Approximation A;
 
@@ -12,6 +12,4 @@ int main()
     A.setCP();
     A.BezierCurve();
     A.solveNormalization();
-
-    return 0;
 }
